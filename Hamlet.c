@@ -143,43 +143,7 @@ int Find_String_Borders (struct string *str_ar, char *buffer, const long n_symbs
 
     return NO_ERRORS;
 }
-/*
-int Open_Logfile (void)
-{
-    LOG_FILE = fopen ("log_file.log", "wb");
 
-    if (!LOG_FILE)
-    {
-        LOG_FILE = stderr;
-        MY_ASSERT (0, "LOG_FILE", "Impossible to open log file", {return ERROR;});
-    }
-
-    fprintf (LOG_FILE, "%s", PREAMBLE);
-
-    return NO_ERRORS;
-}
-
-int My_Assert (bool condition, const char *file, int line, const char *fun_name, const char *var_name, const char *err_name)
-{
-    assert (fun_name);
-    assert (var_name);
-    assert (err_name);
-    assert (line > 0);
-
-    if (!condition)
-    {
-        fprintf (LOG_FILE, "File: %s\n",                                   file);
-        fprintf (LOG_FILE, "Line: %d\n",                                   line);
-        fprintf (LOG_FILE, "Function with error: %s\n",                    fun_name);
-        fprintf (LOG_FILE, "Variable or function that caused error: %s\n", var_name);
-        fprintf (LOG_FILE, "Error description: %s\n\n",                    err_name);
-
-        return 1;
-    }
-
-    return 0;
-}
-*/
 int Memory_Free (struct string *str_ar, struct string **str_arr_ptr, char *buffer)
 {
     MY_ASSERT (str_ar,      "struct string *str_ar",      NULL_PTR, ERROR);
