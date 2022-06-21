@@ -1,5 +1,5 @@
-#include "Hamlet.h"
-#include "../My_Lib/My_Lib.h"
+#include "../include/Hamlet.h"
+#include "My_Lib.h"
 
 int Sort_And_Print (struct string *str_ar, struct string **str_arr_ptr,
                     const int n_strings, const char *file_sort_name)

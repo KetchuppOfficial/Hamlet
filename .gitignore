@@ -1,2 +1,7 @@
-Objects/
-log_file.log
+# Service files
+#~~~~~~~~~~~~~~~~~~~
+*.o
+*.d
+*.out
+*.log
+#~~~~~~~~~~~~~~~~~~~

@@ -1,27 +1,12 @@
-#include "Hamlet.h"
-#include "../My_Lib/My_Lib.h"
-
-extern FILE *LOG_FILE;
+#include "../include/Hamlet.h"
+#include "My_Lib.h"
 
 int Run_Hamlet (struct Basic_Data *structure)
 {
     MY_ASSERT (structure, "struct Basic_Data *structure", NULL_PTR, ERROR);
 
-    structure->file_input_ptr = Open_File (structure->file_input_name, "rb");
-    if (structure->file_input_ptr == NULL)
-        return ERROR;
-
-    structure->n_symbs = Define_File_Size (structure->file_input_ptr);
-    if (structure->n_symbs == ERROR)
-        return ERROR;
-
-    structure->buffer = Make_Buffer (structure->file_input_ptr, structure->n_symbs);
-    if (structure->buffer == NULL)
-        return ERROR;
-
-    if (Close_File (structure->file_input_ptr, structure->file_input_name) == ERROR)
-        return ERROR;
-
+    structure->buffer = Make_File_Buffer (structure->file_input_name, &structure->n_symbs);
+    
     structure->n_strings = Make_Strings (structure->buffer, structure->n_symbs);
     if (structure->n_strings == ERROR)
         return ERROR;

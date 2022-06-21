@@ -1,16 +1,15 @@
-#include "Hamlet.h"
-#include "../My_Lib/My_Lib.h"
+#include "../include/Hamlet.h"
+#include "My_Lib.h"
 
 int main (int argc, char *argv[])
 {
-    OPEN_LOG_FILE;
+    Open_Log_File ("Hamlet");
 
-    if (argc < 2)
-        MY_ASSERT (false, "int argc", NOT_ENOUGH_ARGS, ERROR);
+    if (argc != 3)
+        MY_ASSERT (false, "int argc", UNEXP_VAL, ERROR);
 
     struct Basic_Data hamlet =
     {
-        NULL,
         argv[1],    //source
         argv[2],    //result
         NULL,

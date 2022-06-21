@@ -1,27 +1,53 @@
-CC = gcc -std=c17
+CC     = gcc
+CFLAGS = -Wall -Werror -Wextra -Wshadow -Wswitch-default -Wfloat-equal
 
-CFLAGS = -c -Wall -Werror -Wextra
+PROJECT = Hamlet
 
-all: Hamlet
+BIN      = ./bin/
+SRCDIR   = ./src/
+BUILDDIR = ./build/
 
-Hamlet: main.o Hamlet.o Sorting.o
-	$(CC) Objects/main.o Objects/Hamlet.o Objects/Sorting.o ../My_Lib/My_Lib.a -o Hamlet.out
+SRC_LIST = main.c Hamlet.c Sorting.c
+SRC = $(addprefix $(SRCDIR), $(SRC_LIST))
 
-main.o: main.c
-	$(CC) $(CFLAGS) main.c -o Objects/main.o
+SUBS := $(SRC)
+SUBS := $(subst $(SRCDIR), $(BUILDDIR), $(SUBS))
 
-Hamlet.o: Hamlet.c
-	$(CC) $(CFLAGS) Hamlet.c -o Objects/Hamlet.o
+OBJ  = $(SUBS:.c=.o)
+DEPS = $(SUBS:.c=.d)
 
-Sorting.o: Sorting.c
-	$(CC) $(CFLAGS) Sorting.c -o Objects/Sorting.o
+LIBS_LIST = My_Lib
+LIBSDIR = $(addprefix ./, $(LIBS_LIST))
+LIBS = $(addsuffix /*.a, $(LIBSDIR))
 
-run:
-	./Hamlet.out "hamlet.txt" "sorted.txt"
+.PHONY: all $(LIBSDIR)
+
+all: $(DEPS) $(OBJ) $(LIBSDIR)
+	@mkdir -p $(BIN)
+	@echo "Linking project..."
+	@$(CC) $(OBJ) $(LIBS) -lm -o $(BIN)$(PROJECT).out
+
+$(LIBSDIR):
+	@$(MAKE) -C $@ --no-print-directory -f Makefile.mak
+
+$(BUILDDIR)%.o: $(SRCDIR)%.c
+	@mkdir -p $(dir $@)
+	@echo "Compiling \"$<\"..."
+	@$(CC) $(CFLAGS) -g $(OPT) -c -I$(LIBSDIR) $< -o $@
+
+include $(DEPS)
+
+$(BUILDDIR)%.d: $(SRCDIR)%.c
+	@echo "Collecting dependencies for \"$<\"..."
+	@mkdir -p $(dir $@)
+	@$(CC) -E $(CFLAGS) -I$(LIBSDIR) $< -MM -MT $(@:.d=.o) > $@
+
+.PHONY: run clean
 
 clean:
-	rm -rf Objects/main.o Objects/Hamlet.o Objects/Sorting.o
-	rm Hamlet.out
+	@echo "Cleaning service files..."
+	@rm -rf $(OBJ) $(DEPS)
 
-clean_log:
-	rm log_file.log
+run: $(BIN)$(PROJECT).out
+	@echo "Running \"$<\"..."
+	@$(BIN)$(PROJECT).out $(IN) $(OUT)
